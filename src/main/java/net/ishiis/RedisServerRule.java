@@ -10,6 +10,10 @@ public class RedisServerRule extends ExternalResource {
         this.redisServer = new RedisServer();
     }
 
+    public RedisServerRule(Integer port) {
+        this.redisServer = new RedisServer(port);
+    }
+
     @Override
     protected void before() {
         redisServer.start();
