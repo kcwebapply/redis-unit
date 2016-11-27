@@ -1,4 +1,4 @@
-package net.ishiis;
+package net.ishiis.redis.unit;
 
 public interface Redis {
     void start();

@@ -1,13 +1,12 @@
-package net.ishiis;
+package net.ishiis.redis.unit;
 
 
+import net.ishiis.redis.unit.RedisServer;
 import org.junit.Assert;
 import org.junit.Test;
 import redis.clients.jedis.Jedis;
 
-import java.io.IOException;
-
-import static net.ishiis.RedisServer.DEFAULT_REDIS_SERVER_PORT;
+import static net.ishiis.redis.unit.RedisServer.DEFAULT_REDIS_SERVER_PORT;
 
 
 public class RedisServerTest {
