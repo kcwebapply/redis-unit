@@ -2,6 +2,8 @@ package net.ishiis;
 
 import org.junit.rules.ExternalResource;
 
+import java.io.IOException;
+
 
 public class RedisServerRule extends ExternalResource {
     private final RedisServer redisServer;
@@ -15,7 +17,7 @@ public class RedisServerRule extends ExternalResource {
     }
 
     @Override
-    protected void before() {
+    protected void before() throws IOException {
         redisServer.start();
     }
 
