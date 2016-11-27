@@ -3,7 +3,8 @@ Redis Unit
 
 Redis Unit requires Maven 3.0 or higher and Java 8 at runtime.
 
-If using Linux OS, you need to set kernel parameters to run Redis.
+If using Linux OS, need to set kernel parameters to run Redis.
+
     sysctl -w vm.overcommit_memory=1
     sysctl -w net.core.somaxconn=1024
 
