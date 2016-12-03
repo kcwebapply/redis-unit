@@ -16,8 +16,7 @@ public class RedisSentinel implements Redis {
     private final List<RedisServer> sentinels = new ArrayList<>();
 
     public RedisSentinel() {
-        this(DEFAULT_REDIS_SERVER_PORT, DEFAULT_REDIS_SENTINEL_PORT,
-                DEFAULT_REDIS_SENTINEL_PORT + 1, DEFAULT_REDIS_SENTINEL_PORT +2);
+        this(DEFAULT_REDIS_SENTINEL_PORT, DEFAULT_REDIS_SENTINEL_PORT + 1, DEFAULT_REDIS_SENTINEL_PORT +2);
     }
 
     public RedisSentinel(Integer... sentinelPorts) {
