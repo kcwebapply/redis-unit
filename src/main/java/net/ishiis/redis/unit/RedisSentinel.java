@@ -20,11 +20,13 @@ public class RedisSentinel implements Redis {
                 DEFAULT_REDIS_SENTINEL_PORT + 1, DEFAULT_REDIS_SENTINEL_PORT +2);
     }
 
-    public RedisSentinel(Integer masterPort, Integer... sentinelPorts) {
-        this(new RedisConfig.ServerBuilder(masterPort).build(),
-                Collections.singletonList(new RedisConfig.ServerBuilder(masterPort + 1).masterPort(masterPort).build()),
+    public RedisSentinel(Integer... sentinelPorts) {
+        this(new RedisConfig.ServerBuilder(DEFAULT_REDIS_SERVER_PORT).build(),
+                Collections.singletonList(new RedisConfig.ServerBuilder(DEFAULT_REDIS_SERVER_PORT + 1)
+                        .masterPort(DEFAULT_REDIS_SERVER_PORT).build()),
                 Arrays.stream(sentinelPorts)
-                        .map(sentinelPort -> new RedisConfig.SentinelBuilder(sentinelPort, masterPort).build())
+                        .map(sentinelPort ->
+                                new RedisConfig.SentinelBuilder(sentinelPort, DEFAULT_REDIS_SERVER_PORT).build())
                         .collect(Collectors.toList()));
     }
 
