@@ -2,8 +2,6 @@ package net.ishiis.redis.unit;
 
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -39,13 +37,13 @@ public class RedisServer implements Redis {
             tempDirectory = Files.createTempDirectory("redis-unit-");
             Paths.get(tempDirectory.toString(), config.getConfigFile().toString()).toFile().createNewFile();
         } catch (IOException e) {
-            throw new RuntimeException("Unable to create a temp file.", e);
+            throw new RuntimeException("Unable to create a resource.", e);
         }
 
         Path redisBinary = Paths.get(config.getRedisBinaryPath());
         redisBinary.toFile().setExecutable(true);
 
-        // Start redis server.
+        // Start redis process.
         ProcessBuilder processBuilder = new ProcessBuilder(config.getCommand());
         processBuilder.directory(tempDirectory.toFile());
 
