@@ -11,7 +11,7 @@ import static net.ishiis.redis.unit.RedisServer.DEFAULT_REDIS_SERVER_PORT;
 public class RedisServerTest {
 
     @Test
-    public void testStart() {
+    public void testStartAndStop() {
         RedisServer redisServer = new RedisServer();
         redisServer.start();
 
@@ -31,16 +31,6 @@ public class RedisServerTest {
         Jedis jedis = new Jedis("localhost", 6380);
         Assert.assertNotNull(jedis.info());
         jedis.close();
-
-        redisServer.stop();
-        Assert.assertFalse(redisServer.isActive());
-    }
-
-    @Test
-    public void testStop() {
-        RedisServer redisServer = new RedisServer();
-        redisServer.start();
-        Assert.assertTrue(redisServer.isActive());
 
         redisServer.stop();
         Assert.assertFalse(redisServer.isActive());
@@ -67,6 +57,34 @@ public class RedisServerTest {
         Assert.assertTrue(redisServer.isActive());
         redisServer.stop();
         Assert.assertFalse(redisServer.isActive());
+    }
+
+    @Test
+    public void testSimpleRunThreeTimes() {
+        RedisServer redisServer = new RedisServer();
+        Assert.assertFalse(redisServer.isActive());
+        redisServer.start();
+        Assert.assertTrue(redisServer.isActive());
+        redisServer.stop();
+        Assert.assertFalse(redisServer.isActive());
+
+        redisServer.start();
+        Assert.assertTrue(redisServer.isActive());
+        redisServer.stop();
+        Assert.assertFalse(redisServer.isActive());
+
+        redisServer.start();
+        Assert.assertTrue(redisServer.isActive());
+        redisServer.stop();
+        Assert.assertFalse(redisServer.isActive());
+    }
+
+    @Test
+    public void testUsingRedisConfig() {
+        RedisServer redisServer = new RedisServer(new RedisConfig.ServerBuilder(6666).build());
+        redisServer.start();
+        Assert.assertTrue(redisServer.isActive());
+        redisServer.stop();
     }
 
 }

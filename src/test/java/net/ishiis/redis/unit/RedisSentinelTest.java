@@ -42,7 +42,49 @@ public class RedisSentinelTest {
     }
 
     @Test
-    public void testIsActive() {
+    public void testSpecifyPort() throws InterruptedException {
+        RedisSentinel redisSentinel = new RedisSentinel(36479, 36480, 36481, 36482, 36483);
+        redisSentinel.start();
 
+        Thread.sleep(2000L);
+
+        Assert.assertTrue(redisSentinel.isActive());
+        redisSentinel.stop();
+        Assert.assertFalse(redisSentinel.isActive());
     }
+
+    @Test
+    public void testIsActive() throws InterruptedException {
+        RedisSentinel redisSentinel = new RedisSentinel();
+        redisSentinel.start();
+
+        Thread.sleep(2000L);
+
+        Assert.assertTrue(redisSentinel.isActive());
+        redisSentinel.stop();
+        Assert.assertFalse(redisSentinel.isActive());
+    }
+
+    @Test
+    public void testSimpleRunThreeTimes() throws InterruptedException {
+        RedisSentinel redisSentinel = new RedisSentinel();
+        redisSentinel.start();
+        Thread.sleep(2000L);
+        Assert.assertTrue(redisSentinel.isActive());
+        redisSentinel.stop();
+        Assert.assertFalse(redisSentinel.isActive());
+
+        redisSentinel.start();
+        Thread.sleep(2000L);
+        Assert.assertTrue(redisSentinel.isActive());
+        redisSentinel.stop();
+        Assert.assertFalse(redisSentinel.isActive());
+
+        redisSentinel.start();
+        Thread.sleep(2000L);
+        Assert.assertTrue(redisSentinel.isActive());
+        redisSentinel.stop();
+        Assert.assertFalse(redisSentinel.isActive());
+    }
+
 }

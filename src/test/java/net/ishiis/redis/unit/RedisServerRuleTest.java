@@ -7,39 +7,44 @@ import org.junit.Rule;
 import org.junit.Test;
 import redis.clients.jedis.Jedis;
 
-import static net.ishiis.redis.unit.RedisServer.DEFAULT_REDIS_SERVER_PORT;
-
 public class RedisServerRuleTest {
 
     @Rule
-    public RedisServerRule redisServerRule = new RedisServerRule();
-
-    @Rule
-    public RedisServerRule redisServerRule6380 = new RedisServerRule(6380);
+    public RedisServerRule redisServerRule = new RedisServerRule(6333);
 
     @ClassRule
-    public static RedisServerRule redisServerClassRule = new RedisServerRule(6381);
-
-    private Jedis jedis;
-
-    @Test
-    public void testRedisServerRule() {
-        jedis = new Jedis("localhost", DEFAULT_REDIS_SERVER_PORT, 2000, 2000);
-        Assert.assertNotNull(jedis.info());
-        jedis.close();
-    }
+    public static RedisServerRule redisServerClassRule = new RedisServerRule(7778);
 
     @Test
     public void testRedisServerRuleSpecifyPort() {
-        jedis = new Jedis("localhost", 6380, 2000, 2000);
+        Jedis jedis = new Jedis("localhost", 6333, 2000, 2000);
         Assert.assertNotNull(jedis.info());
         jedis.close();
     }
 
     @Test
-    public void testRedisServerClassRule() {
-        jedis = new Jedis("localhost", 6381, 2000, 2000);
-        Assert.assertNotNull(jedis.info());
+    public void testRedisServerClassRuleHasState1() {
+        Jedis jedis = new Jedis("localhost", 7778);
+
+        if (jedis.get("testKey") == null) {
+            jedis.set("testKey", "testValue");
+        } else {
+            Assert.assertEquals("testValue", jedis.get("testKey"));
+        }
+
+        jedis.close();
+    }
+
+    @Test
+    public void testRedisServerClassRuleHasState2() {
+        Jedis jedis = new Jedis("localhost", 7778);
+
+        if (jedis.get("testKey") == null) {
+            jedis.set("testKey", "testValue");
+        } else {
+            Assert.assertEquals("testValue", jedis.get("testKey"));
+        }
+
         jedis.close();
     }
 

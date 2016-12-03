@@ -10,7 +10,7 @@ import static net.ishiis.redis.unit.RedisServer.DEFAULT_REDIS_SERVER_PORT;
 public class RedisMasterSlaveTest {
 
     @Test
-    public void testStartAnStop() {
+    public void testStartAndStop() {
         RedisMasterSlave redisMasterSlave = new RedisMasterSlave();
         redisMasterSlave.start();
 
