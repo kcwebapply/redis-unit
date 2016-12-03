@@ -1,7 +1,6 @@
 package net.ishiis.redis.unit;
 
 
-import net.ishiis.redis.unit.RedisServerRule;
 import org.junit.Assert;
 import org.junit.ClassRule;
 import org.junit.Rule;

@@ -2,6 +2,7 @@ package net.ishiis.redis.unit;
 
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import redis.clients.jedis.Jedis;
 
@@ -10,7 +11,7 @@ import static net.ishiis.redis.unit.RedisServer.DEFAULT_REDIS_SERVER_PORT;
 public class RedisMasterSlaveTest {
 
     @Test
-    public void testStart() {
+    public void testStartAnStop() {
         RedisMasterSlave redisMasterSlave = new RedisMasterSlave();
         redisMasterSlave.start();
 
@@ -25,5 +26,15 @@ public class RedisMasterSlaveTest {
         slave.close();
 
         redisMasterSlave.stop();
+    }
+
+    @Test
+    public void testIsAlive() {
+        RedisMasterSlave redisMasterSlave = new RedisMasterSlave();
+        Assert.assertFalse(redisMasterSlave.isAlive());
+        redisMasterSlave.start();
+        Assert.assertTrue(redisMasterSlave.isAlive());
+        redisMasterSlave.stop();
+        Assert.assertFalse(redisMasterSlave.isAlive());
     }
 }

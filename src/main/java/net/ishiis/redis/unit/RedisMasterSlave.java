@@ -41,7 +41,7 @@ public class RedisMasterSlave implements Redis {
 
     @Override
     public Boolean isAlive() {
-        return master != null && slaves.isEmpty() && master.isAlive() && slaves.stream().allMatch(RedisServer::isAlive);
+        return master != null && !slaves.isEmpty() && master.isAlive() && slaves.stream().allMatch(RedisServer::isAlive);
     }
 
 }

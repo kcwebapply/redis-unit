@@ -59,4 +59,14 @@ public class RedisServerTest {
         redisServer.stop();
     }
 
+    @Test
+    public void testIsAlive() {
+        RedisServer redisServer = new RedisServer();
+        Assert.assertFalse(redisServer.isAlive());
+        redisServer.start();
+        Assert.assertTrue(redisServer.isAlive());
+        redisServer.stop();
+        Assert.assertFalse(redisServer.isAlive());
+    }
+
 }

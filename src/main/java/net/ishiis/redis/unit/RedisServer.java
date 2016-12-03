@@ -2,6 +2,7 @@ package net.ishiis.redis.unit;
 
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -11,8 +12,9 @@ import java.nio.file.Paths;
 public class RedisServer implements Redis {
     public static final Integer DEFAULT_REDIS_SERVER_PORT = 6379;
 
-    private static final String REDIS_START_UP_COMPLETE_MESSAGE = "The server is now ready to accept connections on port";
-    private static final String REDIS_ADDRESS_ALREADY_IN_USE = "Address already in use";
+    private static final String REDIS_SERVER_START_UP_COMPLETE_MESSAGE = "The server is now ready to accept connections on port";
+    private static final String REDIS_ADDRESS_ALREADY_IN_USE_MESSAGE = "Address already in use";
+    private static final String REDIS_SENTINEL_START_UP_COMPLETE_MESSAGE = "Sentinel ID is";
 
     private RedisConfig config;
     private Process process;
@@ -46,24 +48,29 @@ public class RedisServer implements Redis {
         // Start redis server.
         ProcessBuilder processBuilder = new ProcessBuilder(config.getCommand());
         processBuilder.directory(tempDirectory.toFile());
+
         try {
             process = processBuilder.start();
         } catch (IOException e) {
             throw new RuntimeException("Unable to start Redis.", e);
         }
 
-        Path logFile = Paths.get(tempDirectory.toString(), config.getLogFile().toString());
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(logFile.toFile()))) {
+        File logFile = Paths.get(tempDirectory.toString(), config.getLogFile().toString()).toFile();
+
+        try (FileReader fileReader = new FileReader(logFile);
+             BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+            try {Thread.sleep(1000L);} catch (InterruptedException e) {e.printStackTrace();}
             String outputLine;
             do {
                 outputLine = bufferedReader.readLine();
                 if (outputLine == null) {
                     throw new RuntimeException("Output line does not exist.");
                 }
-                if (outputLine.contains(REDIS_ADDRESS_ALREADY_IN_USE)) {
+                if (outputLine.contains(REDIS_ADDRESS_ALREADY_IN_USE_MESSAGE)) {
                     throw new RuntimeException("Address already in use.");
                 }
-            } while (!outputLine.contains(REDIS_START_UP_COMPLETE_MESSAGE));
+            } while (!outputLine.contains(REDIS_SERVER_START_UP_COMPLETE_MESSAGE) &&
+                    !outputLine.contains(REDIS_SENTINEL_START_UP_COMPLETE_MESSAGE));
         } catch (IOException e) {
             throw new RuntimeException("IOException: ", e);
         }
