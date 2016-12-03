@@ -46,7 +46,8 @@ public class RedisSentinel implements Redis {
     }
 
     @Override
-    public Boolean isAlive() {
-        return masterSlave != null && !sentinels.isEmpty() && masterSlave.isAlive() && sentinels.stream().allMatch(RedisServer::isAlive);
+    public Boolean isActive() {
+        return masterSlave != null && !sentinels.isEmpty() && masterSlave.isActive()
+                && sentinels.stream().allMatch(RedisServer::isActive);
     }
 }

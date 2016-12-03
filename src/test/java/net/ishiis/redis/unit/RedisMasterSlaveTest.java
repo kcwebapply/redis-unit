@@ -2,7 +2,6 @@ package net.ishiis.redis.unit;
 
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import redis.clients.jedis.Jedis;
 
@@ -29,12 +28,12 @@ public class RedisMasterSlaveTest {
     }
 
     @Test
-    public void testIsAlive() {
+    public void testIsActive() {
         RedisMasterSlave redisMasterSlave = new RedisMasterSlave();
-        Assert.assertFalse(redisMasterSlave.isAlive());
+        Assert.assertFalse(redisMasterSlave.isActive());
         redisMasterSlave.start();
-        Assert.assertTrue(redisMasterSlave.isAlive());
+        Assert.assertTrue(redisMasterSlave.isActive());
         redisMasterSlave.stop();
-        Assert.assertFalse(redisMasterSlave.isAlive());
+        Assert.assertFalse(redisMasterSlave.isActive());
     }
 }

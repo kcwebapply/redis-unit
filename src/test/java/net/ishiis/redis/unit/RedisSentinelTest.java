@@ -40,4 +40,9 @@ public class RedisSentinelTest {
         sentinelPool.close();
         redisSentinel.stop();
     }
+
+    @Test
+    public void testIsActive() {
+
+    }
 }

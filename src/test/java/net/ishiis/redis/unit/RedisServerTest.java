@@ -26,24 +26,24 @@ public class RedisServerTest {
     public void testSpecifyPort() {
         RedisServer redisServer = new RedisServer(6380);
         redisServer.start();
-        Assert.assertTrue(redisServer.isAlive());
+        Assert.assertTrue(redisServer.isActive());
 
         Jedis jedis = new Jedis("localhost", 6380);
         Assert.assertNotNull(jedis.info());
         jedis.close();
 
         redisServer.stop();
-        Assert.assertFalse(redisServer.isAlive());
+        Assert.assertFalse(redisServer.isActive());
     }
 
     @Test
     public void testStop() {
         RedisServer redisServer = new RedisServer();
         redisServer.start();
-        Assert.assertTrue(redisServer.isAlive());
+        Assert.assertTrue(redisServer.isActive());
 
         redisServer.stop();
-        Assert.assertFalse(redisServer.isAlive());
+        Assert.assertFalse(redisServer.isActive());
     }
 
     @Test
@@ -62,11 +62,11 @@ public class RedisServerTest {
     @Test
     public void testIsAlive() {
         RedisServer redisServer = new RedisServer();
-        Assert.assertFalse(redisServer.isAlive());
+        Assert.assertFalse(redisServer.isActive());
         redisServer.start();
-        Assert.assertTrue(redisServer.isAlive());
+        Assert.assertTrue(redisServer.isActive());
         redisServer.stop();
-        Assert.assertFalse(redisServer.isAlive());
+        Assert.assertFalse(redisServer.isActive());
     }
 
 }

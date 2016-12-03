@@ -89,7 +89,7 @@ public class RedisServer implements Redis {
     }
 
     @Override
-    public Boolean isAlive() {
+    public Boolean isActive() {
         return process != null && process.isAlive();
     }
 
