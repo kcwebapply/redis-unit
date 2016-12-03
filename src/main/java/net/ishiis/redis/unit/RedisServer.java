@@ -55,10 +55,9 @@ public class RedisServer implements Redis {
             throw new RuntimeException("Unable to start Redis.", e);
         }
 
-        File logFile = Paths.get(tempDirectory.toString(), config.getLogFile().toString()).toFile();
+        Path logFilePath = Paths.get(tempDirectory.toString(), config.getLogFile().toString());
 
-        try (FileReader fileReader = new FileReader(logFile);
-             BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+        try (BufferedReader bufferedReader = Files.newBufferedReader(logFilePath)) {
             try {Thread.sleep(1000L);} catch (InterruptedException e) {e.printStackTrace();}
             String outputLine;
             do {
