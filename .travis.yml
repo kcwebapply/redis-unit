@@ -1,6 +1,10 @@
 language: java
+
 os:
   - linux
   - osx
+
+osx_image: xcode8.2
+
 jdk:
   - oraclejdk8
