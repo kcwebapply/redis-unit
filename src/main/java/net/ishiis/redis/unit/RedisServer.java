@@ -64,6 +64,7 @@ public class RedisServer implements Redis {
             String outputLine;
             do {
                 outputLine = bufferedReader.readLine();
+                System.out.println(outputLine);
                 if (outputLine == null) {
                     throw new RuntimeException("Output line does not exist.");
                 }
