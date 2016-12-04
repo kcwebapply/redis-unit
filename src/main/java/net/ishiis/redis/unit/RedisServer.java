@@ -33,18 +33,19 @@ public class RedisServer implements Redis {
     public void start() {
         // Create Redis working directory and empty config file.
         Path tempDirectory;
+        Path logFilePath;
         try {
             tempDirectory = Paths.get(System.getProperty("user.dir"), ".redis", String.valueOf(System.currentTimeMillis()));
             tempDirectory.toFile().mkdirs();
             Paths.get(tempDirectory.toString(), config.getConfigFile().toString()).toFile().createNewFile();
+            logFilePath = Paths.get(tempDirectory.toString(), config.getLogFile().toString());
+            logFilePath.toFile().createNewFile();
         } catch (IOException e) {
             throw new RuntimeException("Unable to create a resource.", e);
         }
 
         Path redisBinary = Paths.get(config.getRedisBinaryPath());
         redisBinary.toFile().setExecutable(true);
-
-        Path logFilePath = Paths.get(tempDirectory.toString(), config.getLogFile().toString());
 
         // Start redis process.
         ProcessBuilder processBuilder = new ProcessBuilder(config.getCommand());
@@ -62,6 +63,7 @@ public class RedisServer implements Redis {
             String outputLine;
             do {
                 outputLine = bufferedReader.readLine();
+                System.out.println(outputLine);
                 if (outputLine == null) {
                     throw new RuntimeException("Output line does not exist.");
                 }
