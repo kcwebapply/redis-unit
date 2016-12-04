@@ -1,10 +1,11 @@
 language: java
 
-os:
-  - linux
-  - osx
+matrix:
+  include:
+    - os: linux
 
-osx_image: xcode8.2
+    - os: osx
+      osx_image: xcode8.2
 
 jdk:
   - oraclejdk8
