@@ -17,14 +17,14 @@ public class RedisServerRuleTest {
 
     @Test
     public void testRedisServerRuleSpecifyPort() {
-        Jedis jedis = new Jedis("127.0.0.1", 6333, 2000, 2000);
+        Jedis jedis = new Jedis("localhost", 6333, 2000, 2000);
         Assert.assertNotNull(jedis.info());
         jedis.close();
     }
 
     @Test
     public void testRedisServerClassRuleHasState1() {
-        Jedis jedis = new Jedis("127.0.0.1", 7778);
+        Jedis jedis = new Jedis("localhost", 7778);
 
         if (jedis.get("testKey") == null) {
             jedis.set("testKey", "testValue");
@@ -37,7 +37,7 @@ public class RedisServerRuleTest {
 
     @Test
     public void testRedisServerClassRuleHasState2() {
-        Jedis jedis = new Jedis("127.0.0.1", 7778);
+        Jedis jedis = new Jedis("localhost", 7778);
 
         if (jedis.get("testKey") == null) {
             jedis.set("testKey", "testValue");

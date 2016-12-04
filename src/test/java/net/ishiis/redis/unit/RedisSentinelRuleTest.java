@@ -25,16 +25,16 @@ public class RedisSentinelRuleTest {
     public void testRedisSentinelRule() throws InterruptedException {
         Thread.sleep(2000L);
 
-        Jedis connectToSentinel = new Jedis("127.0.0.1", 18888);
+        Jedis connectToSentinel = new Jedis("localhost", 18888);
         Assert.assertNotNull(connectToSentinel.info("Sentinel"));
         Assert.assertTrue(connectToSentinel.info("Sentinel").contains("slaves=1"));
         Assert.assertTrue(connectToSentinel.info("Sentinel").contains("sentinels=3"));
         connectToSentinel.close();
 
         Set<String> sentinels = new HashSet<>();
-        sentinels.add(new HostAndPort("127.0.0.1", 18888).toString());
-        sentinels.add(new HostAndPort("127.0.0.1", 18889).toString());
-        sentinels.add(new HostAndPort("127.0.0.1", 18890).toString());
+        sentinels.add(new HostAndPort("localhost", 18888).toString());
+        sentinels.add(new HostAndPort("localhost", 18889).toString());
+        sentinels.add(new HostAndPort("localhost", 18890).toString());
 
         JedisSentinelPool sentinelPool = new JedisSentinelPool("mymaster", sentinels);
         Jedis connectToMaster = sentinelPool.getResource();

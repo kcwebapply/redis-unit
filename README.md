@@ -1,6 +1,8 @@
 Redis Unit
 =================
 
+[![Build Status](https://travis-ci.org/ishiis/redis-unit.svg?branch=master)](https://travis-ci.org/ishiis/redis-unit)
+
 Start and stop Redis instance for unit testing applications.
 
 ### Requirements ###
