@@ -34,7 +34,8 @@ public class RedisServer implements Redis {
         // Create Redis working directory and empty config file.
         Path tempDirectory;
         try {
-            tempDirectory = Files.createTempDirectory("redis-unit-");
+            tempDirectory = Paths.get(System.getProperty("user.dir"), ".redis", String.valueOf(System.currentTimeMillis()));
+            tempDirectory.toFile().mkdirs();
             Paths.get(tempDirectory.toString(), config.getConfigFile().toString()).toFile().createNewFile();
         } catch (IOException e) {
             throw new RuntimeException("Unable to create a resource.", e);
