@@ -44,20 +44,21 @@ public class RedisServer implements Redis {
         Path redisBinary = Paths.get(config.getRedisBinaryPath());
         redisBinary.toFile().setExecutable(true);
 
+        Path logFilePath = Paths.get(tempDirectory.toString(), config.getLogFile().toString());
+
         // Start redis process.
         ProcessBuilder processBuilder = new ProcessBuilder(config.getCommand());
         processBuilder.directory(tempDirectory.toFile());
+        processBuilder.redirectError(logFilePath.toFile());
 
         try {
             process = processBuilder.start();
+            try {Thread.sleep(1000L);} catch (InterruptedException e) {e.printStackTrace();}
         } catch (IOException e) {
             throw new RuntimeException("Unable to start Redis.", e);
         }
 
-        Path logFilePath = Paths.get(tempDirectory.toString(), config.getLogFile().toString());
-
         try (BufferedReader bufferedReader = Files.newBufferedReader(logFilePath)) {
-            try {Thread.sleep(1000L);} catch (InterruptedException e) {e.printStackTrace();}
             String outputLine;
             do {
                 outputLine = bufferedReader.readLine();
