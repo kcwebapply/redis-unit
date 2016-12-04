@@ -17,6 +17,7 @@ public class RedisConfig {
     private static final String TCP_BACKLOG= "--tcp-backlog %d";
     private static final String MAX_CLIENTS = "--maxclients %d";
     private static final String DIR = "--dir %s";
+    private static final String PROTECTED_MODE = "--protected-mode %s";
 
     // redis master / slave config format
     private static final String SLAVE_OF = "--slaveof 127.0.0.1 %d";
@@ -245,6 +246,7 @@ public class RedisConfig {
         command.add(String.format(MAX_CLIENTS, getMaxClients()));
         command.add(String.format(DIR, getDir()));
         command.add(String.format(TCP_BACKLOG, getTcpBacklog()));
+        command.add(String.format(PROTECTED_MODE, "no"));
 
         if (masterPort != null && masterName == null) {
             command.add(String.format(SLAVE_OF, getMasterPort()));
