@@ -13,6 +13,7 @@ public class RedisServer implements Redis {
     private static final String REDIS_SERVER_START_UP_COMPLETE_MESSAGE = "The server is now ready to accept connections on port";
     private static final String REDIS_ADDRESS_ALREADY_IN_USE_MESSAGE = "Address already in use";
     private static final String REDIS_SENTINEL_START_UP_COMPLETE_MESSAGE = "Sentinel ID is";
+    private static final String REDIS_GLIBC_NOT_FOUND = "GLIBC_2.15";
 
     private RedisConfig config;
     private Process process;
@@ -33,18 +34,19 @@ public class RedisServer implements Redis {
     public void start() {
         // Create Redis working directory and empty config file.
         Path tempDirectory;
+        Path logFilePath;
         try {
             tempDirectory = Paths.get(System.getProperty("user.dir"), ".redis", String.valueOf(System.currentTimeMillis()));
             tempDirectory.toFile().mkdirs();
             Paths.get(tempDirectory.toString(), config.getConfigFile().toString()).toFile().createNewFile();
+            logFilePath = Paths.get(tempDirectory.toString(), config.getLogFile().toString());
+            logFilePath.toFile().createNewFile();
         } catch (IOException e) {
             throw new RuntimeException("Unable to create a resource.", e);
         }
 
         Path redisBinary = Paths.get(config.getRedisBinaryPath());
         redisBinary.toFile().setExecutable(true);
-
-        Path logFilePath = Paths.get(tempDirectory.toString(), config.getLogFile().toString());
 
         // Start redis process.
         ProcessBuilder processBuilder = new ProcessBuilder(config.getCommand());
@@ -64,6 +66,9 @@ public class RedisServer implements Redis {
                 outputLine = bufferedReader.readLine();
                 if (outputLine == null) {
                     throw new RuntimeException("Output line does not exist.");
+                }
+                if (outputLine.contains(REDIS_GLIBC_NOT_FOUND)) {
+                    throw new RuntimeException("GLIBC 2.15 not found.");
                 }
                 if (outputLine.contains(REDIS_ADDRESS_ALREADY_IN_USE_MESSAGE)) {
                     throw new RuntimeException("Address already in use.");
