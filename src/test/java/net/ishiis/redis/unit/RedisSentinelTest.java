@@ -19,13 +19,13 @@ public class RedisSentinelTest {
         redisSentinel.start();
 
         Set<String> sentinels = new HashSet<>();
-        sentinels.add(new HostAndPort("localhost", DEFAULT_REDIS_SENTINEL_PORT).toString());
-        sentinels.add(new HostAndPort("localhost", DEFAULT_REDIS_SENTINEL_PORT + 1).toString());
-        sentinels.add(new HostAndPort("localhost", DEFAULT_REDIS_SENTINEL_PORT + 2).toString());
+        sentinels.add(new HostAndPort("127.0.0.1", DEFAULT_REDIS_SENTINEL_PORT).toString());
+        sentinels.add(new HostAndPort("127.0.0.1", DEFAULT_REDIS_SENTINEL_PORT + 1).toString());
+        sentinels.add(new HostAndPort("127.0.0.1", DEFAULT_REDIS_SENTINEL_PORT + 2).toString());
 
         Thread.sleep(2000L);
 
-        Jedis connectToSentinel = new Jedis("localhost", DEFAULT_REDIS_SENTINEL_PORT);
+        Jedis connectToSentinel = new Jedis("127.0.0.1", DEFAULT_REDIS_SENTINEL_PORT);
         Assert.assertNotNull(connectToSentinel.info("Sentinel"));
         Assert.assertTrue(connectToSentinel.info("Sentinel").contains("slaves=1"));
         Assert.assertTrue(connectToSentinel.info("Sentinel").contains("sentinels=3"));

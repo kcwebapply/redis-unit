@@ -15,7 +15,7 @@ public class RedisServerTest {
         RedisServer redisServer = new RedisServer();
         redisServer.start();
 
-        Jedis jedis = new Jedis("localhost", DEFAULT_REDIS_SERVER_PORT);
+        Jedis jedis = new Jedis("127.0.0.1", DEFAULT_REDIS_SERVER_PORT);
         Assert.assertNotNull(jedis.info());
         jedis.close();
 
@@ -28,7 +28,7 @@ public class RedisServerTest {
         redisServer.start();
         Assert.assertTrue(redisServer.isActive());
 
-        Jedis jedis = new Jedis("localhost", 6380);
+        Jedis jedis = new Jedis("127.0.0.1", 6380);
         Assert.assertNotNull(jedis.info());
         jedis.close();
 
@@ -41,7 +41,7 @@ public class RedisServerTest {
         RedisServer redisServer = new RedisServer();
         redisServer.start();
 
-        Jedis jedis = new Jedis("localhost", DEFAULT_REDIS_SERVER_PORT);
+        Jedis jedis = new Jedis("127.0.0.1", DEFAULT_REDIS_SERVER_PORT);
         jedis.set("testKey", "testValue");
         Assert.assertEquals("testValue", jedis.get("testKey"));
         jedis.close();
