@@ -2,7 +2,6 @@ package net.ishiis.redis.unit;
 
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.Jedis;
@@ -11,7 +10,8 @@ import redis.clients.jedis.JedisSentinelPool;
 import java.util.HashSet;
 import java.util.Set;
 
-import static net.ishiis.redis.unit.RedisSentinel.DEFAULT_REDIS_SENTINEL_PORT;
+import static net.ishiis.redis.unit.config.RedisSentinelConfig.DEFAULT_REDIS_SENTINEL_PORT;
+
 
 public class RedisSentinelTest {
 
@@ -25,7 +25,7 @@ public class RedisSentinelTest {
         sentinels.add(new HostAndPort("localhost", DEFAULT_REDIS_SENTINEL_PORT + 1).toString());
         sentinels.add(new HostAndPort("localhost", DEFAULT_REDIS_SENTINEL_PORT + 2).toString());
 
-        Thread.sleep(1000L);
+        Thread.sleep(2000L);
 
         Jedis connectToSentinel = new Jedis("localhost", DEFAULT_REDIS_SENTINEL_PORT);
         Assert.assertNotNull(connectToSentinel.info("Sentinel"));
@@ -48,7 +48,7 @@ public class RedisSentinelTest {
         RedisSentinel redisSentinel = new RedisSentinel(36479, 36480, 36481, 36482, 36483);
         redisSentinel.start();
 
-        Thread.sleep(1000L);
+        Thread.sleep(2000L);
 
         Assert.assertTrue(redisSentinel.isActive());
         redisSentinel.stop();
@@ -60,7 +60,7 @@ public class RedisSentinelTest {
         RedisSentinel redisSentinel = new RedisSentinel();
         redisSentinel.start();
 
-        Thread.sleep(1000L);
+        Thread.sleep(2000L);
 
         Assert.assertTrue(redisSentinel.isActive());
         redisSentinel.stop();
@@ -71,19 +71,19 @@ public class RedisSentinelTest {
     public void testSimpleRunThreeTimes() throws InterruptedException {
         RedisSentinel redisSentinel = new RedisSentinel();
         redisSentinel.start();
-        Thread.sleep(1000L);
+        Thread.sleep(2000L);
         Assert.assertTrue(redisSentinel.isActive());
         redisSentinel.stop();
         Assert.assertFalse(redisSentinel.isActive());
 
         redisSentinel.start();
-        Thread.sleep(1000L);
+        Thread.sleep(2000L);
         Assert.assertTrue(redisSentinel.isActive());
         redisSentinel.stop();
         Assert.assertFalse(redisSentinel.isActive());
 
         redisSentinel.start();
-        Thread.sleep(1000L);
+        Thread.sleep(2000L);
         Assert.assertTrue(redisSentinel.isActive());
         redisSentinel.stop();
         Assert.assertFalse(redisSentinel.isActive());

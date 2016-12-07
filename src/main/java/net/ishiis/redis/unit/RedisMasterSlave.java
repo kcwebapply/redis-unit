@@ -1,13 +1,14 @@
 package net.ishiis.redis.unit;
 
 import net.ishiis.redis.unit.config.RedisConfig;
+import net.ishiis.redis.unit.config.RedisMasterSlaveConfig;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static net.ishiis.redis.unit.RedisServer.DEFAULT_REDIS_SERVER_PORT;
+import static net.ishiis.redis.unit.config.RedisServerConfig.DEFAULT_REDIS_SERVER_PORT;
 
 public class RedisMasterSlave implements Redis {
     private final RedisServer master;
@@ -18,10 +19,10 @@ public class RedisMasterSlave implements Redis {
     }
 
     public RedisMasterSlave(Integer masterPort, Integer... slavePorts) {
-        this(new RedisConfig.ServerBuilder(masterPort).build(),
+        this(new RedisMasterSlaveConfig.MasterBuilder(masterPort).build(),
                 Arrays.stream(slavePorts)
-                        .map(slavePort -> new RedisConfig.ServerBuilder(slavePort).masterPort(masterPort).build())
-                        .collect(Collectors.toList()));
+                        .map(slavePort -> new RedisMasterSlaveConfig
+                                .SlaveBuilder(slavePort, masterPort).build()).collect(Collectors.toList()));
     }
 
     public RedisMasterSlave(RedisConfig masterConfig, List<RedisConfig> slaveConfigs) {

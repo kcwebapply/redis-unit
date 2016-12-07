@@ -2,6 +2,7 @@ package net.ishiis.redis.unit;
 
 
 import net.ishiis.redis.unit.config.RedisConfig;
+import net.ishiis.redis.unit.config.RedisServerConfig;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -10,9 +11,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class RedisServer implements Redis {
-    public static final Integer DEFAULT_REDIS_SERVER_PORT = 6379;
+import static net.ishiis.redis.unit.config.RedisServerConfig.DEFAULT_REDIS_SERVER_PORT;
 
+public class RedisServer implements Redis {
     private static final String REDIS_SERVER_START_UP_COMPLETE_MESSAGE = "The server is now ready to accept connections on port";
     private static final String REDIS_ADDRESS_ALREADY_IN_USE_MESSAGE = "Address already in use";
     private static final String REDIS_SENTINEL_START_UP_COMPLETE_MESSAGE = "Sentinel ID is";
@@ -26,7 +27,7 @@ public class RedisServer implements Redis {
     }
 
     public RedisServer(Integer port) {
-        this(new RedisConfig.ServerBuilder(port).build());
+        this(new RedisServerConfig.ServerBuilder(port).build());
     }
 
     public RedisServer(RedisConfig config) {
@@ -69,7 +70,6 @@ public class RedisServer implements Redis {
             String outputLine;
             do {
                 outputLine = bufferedReader.readLine();
-                System.out.println(outputLine);
                 if (outputLine == null) {
                     throw new RuntimeException("Output line does not exist.");
                 }

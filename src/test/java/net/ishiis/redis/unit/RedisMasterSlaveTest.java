@@ -5,7 +5,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import redis.clients.jedis.Jedis;
 
-import static net.ishiis.redis.unit.RedisServer.DEFAULT_REDIS_SERVER_PORT;
+import static net.ishiis.redis.unit.config.RedisServerConfig.DEFAULT_REDIS_SERVER_PORT;
+
 
 public class RedisMasterSlaveTest {
 
