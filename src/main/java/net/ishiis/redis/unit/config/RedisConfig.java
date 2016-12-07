@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RedisConfig {
+    public static final String LINE_SEPARATOR = System.getProperty("line.separator");
     private static final String DEFAULT_REDIS_BINARY_NAME = "redis-server.3.2.5";
 
     // redis server config format
@@ -28,6 +29,15 @@ public class RedisConfig {
     private static final String SENTINEL_PARALLEL_SYNCS = "--sentinel parallel-syncs %s %d";
     private static final String SENTINEL_FAILOVER_TIMEOUT = "--sentinel failover-timeout %s %d";
 
+    // cluster config
+    private static final String CLUSTER_ENABLED = "--cluster-enabled yes";
+    private static final String CLUSTER_CONFIG_FILE = "--cluster-config-file %s";
+    private static final String CLUSTER_CONFIG_LINE = "%s 127.0.0.1:%d %smaster - 0 %d %d connected %s";
+    private static final String CLUSTER_NODE_TIMEOUT = "--cluster-node-timeout %d";
+    private static final String CLUSTER_SLAVE_VALIDITY_FACTOR = "--cluster-slave-validity-factor %d";
+    private static final String CLUSTER_MIGRATION_BARRIER = "--cluster-migration-barrier %d";
+    private static final String CLUSTER_REQUIRE_FULL_COVERAGE = "--cluster-require-full-coverage %s";
+
     // server config
     private Integer port;
     private String redisBinaryPath;
@@ -43,6 +53,14 @@ public class RedisConfig {
     private Integer downAfterMillisecond;
     private Integer failoverTimeout;
     private Integer parallelSyncs;
+
+    // cluster config
+    private Integer[] clusterPorts;
+    private Integer nodeTimeout;
+    private Integer slaveValidityFactor;
+    private Integer migrationBarrier;
+    private String requireFullCoverage;
+
 
     public RedisConfig(ServerBuilder serverBuilder) {
         this.port = serverBuilder.port;
@@ -65,6 +83,18 @@ public class RedisConfig {
         this.downAfterMillisecond = sentinelBuilder.downAfterMillisecond;
         this.failoverTimeout = sentinelBuilder.failoverTimeout;
         this.parallelSyncs = sentinelBuilder.parallelSyncs;
+    }
+
+    public RedisConfig(ClusterBuilder clusterBuilder) {
+        this.port = clusterBuilder.port;
+        this.redisBinaryPath = clusterBuilder.redisBinaryPath;
+        this.maxClients = clusterBuilder.maxClients;
+        this.dir = clusterBuilder.dir;
+        this.tcpBacklog = clusterBuilder.tcpBacklog;
+        this.nodeTimeout = clusterBuilder.nodeTimeout;
+        this.slaveValidityFactor = clusterBuilder.slaveValidityFactor;
+        this.migrationBarrier = clusterBuilder.migrationBarrier;
+        this.requireFullCoverage = clusterBuilder.requireFullCoverage;
     }
 
     public static class ServerBuilder {
@@ -177,6 +207,66 @@ public class RedisConfig {
         }
     }
 
+    public static class ClusterBuilder {
+        private Integer port;
+        private String redisBinaryPath;
+        private Integer maxClients = 100;
+        private String dir = ".";
+        private Integer tcpBacklog = 16;
+        private Integer nodeTimeout = 15000;
+        private Integer slaveValidityFactor = 10;
+        private Integer migrationBarrier = 1;
+        private String requireFullCoverage = "yes";
+
+        public ClusterBuilder(Integer port) {
+            this.port = port;
+        }
+
+        public ClusterBuilder redisBinaryPath(String redisBinaryPath) {
+            this.redisBinaryPath = redisBinaryPath;
+            return this;
+        }
+
+        public ClusterBuilder maxClients(Integer maxClients) {
+            this.maxClients = maxClients;
+            return this;
+        }
+
+        public ClusterBuilder dir(String dir) {
+            this.dir = dir;
+            return this;
+        }
+
+        public ClusterBuilder tcpBacklog(Integer tcpBacklog) {
+            this.tcpBacklog = tcpBacklog;
+            return this;
+        }
+
+        public ClusterBuilder nodeTimeout(Integer nodeTimeout) {
+            this.nodeTimeout = nodeTimeout;
+            return this;
+        }
+
+        public ClusterBuilder slaveValidityFactor(Integer slaveValidityFactor) {
+            this.slaveValidityFactor = slaveValidityFactor;
+            return this;
+        }
+
+        public ClusterBuilder migrationBarrier(Integer migrationBarrier) {
+            this.migrationBarrier = migrationBarrier;
+            return this;
+        }
+
+        public ClusterBuilder requireFullCoverage(String requireFullCoverage) {
+            this.requireFullCoverage = requireFullCoverage;
+            return this;
+        }
+
+        public RedisConfig build() {
+            return new RedisConfig(this);
+        }
+    }
+
     public Integer getPort() {
         return port;
     }
@@ -237,6 +327,22 @@ public class RedisConfig {
         return parallelSyncs;
     }
 
+    public Integer getNodeTimeout() {
+        return nodeTimeout;
+    }
+
+    public Integer getSlaveValidityFactor() {
+        return slaveValidityFactor;
+    }
+
+    public Integer getMigrationBarrier() {
+        return migrationBarrier;
+    }
+
+    public Path getClusterConfigFile() {
+        return Paths.get("nodes-" + port + ".conf");
+    }
+
     public List<String> getCommand() {
         List<String> command = new ArrayList<>();
         command.add(getRedisBinaryPath());
@@ -258,6 +364,15 @@ public class RedisConfig {
             command.add(String.format(SENTINEL_DOWN_AFTER_MILLISECOND, getMasterName(), getDownAfterMillisecond()));
             command.add(String.format(SENTINEL_PARALLEL_SYNCS, getMasterName(), getParallelSyncs()));
             command.add(String.format(SENTINEL_FAILOVER_TIMEOUT, getMasterName(), getFailoverTimeout()));
+        }
+
+        if (nodeTimeout != null) {
+            command.add(CLUSTER_ENABLED);
+            command.add(String.format(CLUSTER_CONFIG_FILE, getClusterConfigFile()));
+            command.add(String.format(CLUSTER_NODE_TIMEOUT, getNodeTimeout()));
+            command.add(String.format(CLUSTER_SLAVE_VALIDITY_FACTOR, getSlaveValidityFactor()));
+            command.add(String.format(CLUSTER_MIGRATION_BARRIER, getMigrationBarrier()));
+            command.add(String.format(CLUSTER_REQUIRE_FULL_COVERAGE, "yes"));
         }
 
         return command;
