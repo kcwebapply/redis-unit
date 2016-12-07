@@ -1,6 +1,7 @@
 package net.ishiis.redis.unit;
 
 
+import net.ishiis.redis.unit.config.RedisConfig;
 import org.junit.Assert;
 import org.junit.Test;
 import redis.clients.jedis.Jedis;

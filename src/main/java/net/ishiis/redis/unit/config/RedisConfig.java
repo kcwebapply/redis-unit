@@ -1,4 +1,4 @@
-package net.ishiis.redis.unit;
+package net.ishiis.redis.unit.config;
 
 
 import java.io.UnsupportedEncodingException;
@@ -19,6 +19,7 @@ public class RedisConfig {
     private static final String MAX_CLIENTS = "--maxclients %d";
     private static final String DIR = "--dir %s";
     private static final String PROTECTED_MODE = "--protected-mode %s";
+    private static final String DB_FILE_NAME = "--dbfilename %s.rdb";
 
     // redis master / slave config format
     private static final String SLAVE_OF = "--slaveof 127.0.0.1 %d";
@@ -38,13 +39,14 @@ public class RedisConfig {
     private static final String CLUSTER_MIGRATION_BARRIER = "--cluster-migration-barrier %d";
     private static final String CLUSTER_REQUIRE_FULL_COVERAGE = "--cluster-require-full-coverage %s";
 
+    private Path tempDirectory = Paths.get(System.getProperty("user.dir"), ".redis", String.valueOf(System.currentTimeMillis()));
+
     // server config
     private Integer port;
     private String redisBinaryPath;
     private Integer maxClients;
     private String dir;
     private Integer tcpBacklog;
-
     private Integer masterPort;
 
     // sentinel config
@@ -55,7 +57,6 @@ public class RedisConfig {
     private Integer parallelSyncs;
 
     // cluster config
-    private Integer[] clusterPorts;
     private Integer nodeTimeout;
     private Integer slaveValidityFactor;
     private Integer migrationBarrier;
@@ -343,6 +344,10 @@ public class RedisConfig {
         return Paths.get("nodes-" + port + ".conf");
     }
 
+    public Path getTempDirectory() {
+        return tempDirectory;
+    }
+
     public List<String> getCommand() {
         List<String> command = new ArrayList<>();
         command.add(getRedisBinaryPath());
@@ -364,6 +369,8 @@ public class RedisConfig {
             command.add(String.format(SENTINEL_DOWN_AFTER_MILLISECOND, getMasterName(), getDownAfterMillisecond()));
             command.add(String.format(SENTINEL_PARALLEL_SYNCS, getMasterName(), getParallelSyncs()));
             command.add(String.format(SENTINEL_FAILOVER_TIMEOUT, getMasterName(), getFailoverTimeout()));
+        } else {
+            command.add(String.format(DB_FILE_NAME, getPort()));
         }
 
         if (nodeTimeout != null) {

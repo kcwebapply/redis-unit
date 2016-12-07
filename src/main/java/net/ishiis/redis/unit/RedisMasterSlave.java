@@ -1,5 +1,7 @@
 package net.ishiis.redis.unit;
 
+import net.ishiis.redis.unit.config.RedisConfig;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

@@ -1,7 +1,10 @@
 package net.ishiis.redis.unit;
 
 
+import net.ishiis.redis.unit.config.RedisConfig;
+
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -33,13 +36,15 @@ public class RedisServer implements Redis {
     @Override
     public void start() {
         // Create Redis working directory and empty config file.
-        Path tempDirectory;
-        Path logFilePath;
+        Path tempDirectoryPath = config.getTempDirectory();
+        Path logFilePath = Paths.get(tempDirectoryPath.toString(), config.getLogFile().toString());
         try {
-            tempDirectory = Paths.get(System.getProperty("user.dir"), ".redis", String.valueOf(System.currentTimeMillis()));
-            tempDirectory.toFile().mkdirs();
-            Paths.get(tempDirectory.toString(), config.getConfigFile().toString()).toFile().createNewFile();
-            logFilePath = Paths.get(tempDirectory.toString(), config.getLogFile().toString());
+            tempDirectoryPath.toFile().mkdirs();
+            File configFile = Paths.get(tempDirectoryPath.toString(), config.getConfigFile().toString()).toFile();
+            if (configFile.exists()){
+                configFile.delete();
+            }
+            configFile.createNewFile();
             logFilePath.toFile().createNewFile();
         } catch (IOException e) {
             throw new RuntimeException("Unable to create a resource.", e);
@@ -50,7 +55,7 @@ public class RedisServer implements Redis {
 
         // Start redis process.
         ProcessBuilder processBuilder = new ProcessBuilder(config.getCommand());
-        processBuilder.directory(tempDirectory.toFile());
+        processBuilder.directory(tempDirectoryPath.toFile());
         processBuilder.redirectError(logFilePath.toFile());
 
         try {
