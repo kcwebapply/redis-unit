@@ -1,11 +1,14 @@
 package net.ishiis.redis.unit.config;
 
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 public class RedisServerConfig extends RedisConfig {
     public static final Integer DEFAULT_REDIS_SERVER_PORT = 6379;
+    public static final Path WORKING_DIRECTORY = Paths.get(System.getProperty("user.dir"), ".redis", String.valueOf(System.currentTimeMillis()));
 
     // config format
     private static final String DB_FILE_NAME = "--dbfilename %s.rdb";
@@ -45,6 +48,10 @@ public class RedisServerConfig extends RedisConfig {
         public RedisServerConfig build() {
             return new RedisServerConfig(this);
         }
+    }
+
+    public Path getWorkingDirectory() {
+        return WORKING_DIRECTORY;
     }
 
     public List<String> getCommand() {

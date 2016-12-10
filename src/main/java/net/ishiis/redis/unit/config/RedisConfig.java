@@ -18,8 +18,6 @@ public abstract class RedisConfig {
     protected static final String DIR = "--dir .";
     protected static final String PROTECTED_MODE = "--protected-mode %s";
 
-    private Path tempDirectory = Paths.get(System.getProperty("user.dir"), ".redis", String.valueOf(System.currentTimeMillis()));
-
     // redis config
     protected Integer port;
     protected String redisBinaryPath;
@@ -36,7 +34,7 @@ public abstract class RedisConfig {
                 return URLDecoder.decode(
                         this.getClass().getClassLoader().getResource(DEFAULT_REDIS_BINARY_NAME).getPath(), "UTF-8");
             } catch (UnsupportedEncodingException e) {
-                throw new RuntimeException("UTF-8 is not supported Encoding.", e);
+                throw new RuntimeException("UTF-8 is not supported encoding.", e);
             }
         }
         return redisBinaryPath;
@@ -58,10 +56,8 @@ public abstract class RedisConfig {
         return tcpBacklog;
     }
 
-    public Path getTempDirectory() {
-        return tempDirectory;
-    }
+    public abstract Path getWorkingDirectory();
 
-    abstract public List<String> getCommand();
+    public abstract List<String> getCommand();
 
 }

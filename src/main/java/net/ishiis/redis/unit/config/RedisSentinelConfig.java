@@ -1,8 +1,11 @@
 package net.ishiis.redis.unit.config;
 
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+
+import static net.ishiis.redis.unit.RedisSentinel.WORKING_DIRECTORY;
 
 public class RedisSentinelConfig extends RedisConfig {
     public static final Integer DEFAULT_REDIS_SENTINEL_PORT = 26379;
@@ -118,6 +121,11 @@ public class RedisSentinelConfig extends RedisConfig {
 
     public Integer getParallelSyncs() {
         return parallelSyncs;
+    }
+
+    @Override
+    public Path getWorkingDirectory() {
+        return WORKING_DIRECTORY;
     }
 
     public List<String> getCommand() {

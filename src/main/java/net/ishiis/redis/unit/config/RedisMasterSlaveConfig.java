@@ -1,6 +1,9 @@
 package net.ishiis.redis.unit.config;
 
 
+import net.ishiis.redis.unit.RedisMasterSlave;
+
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,6 +94,11 @@ public class RedisMasterSlaveConfig extends RedisConfig {
 
     public Integer getMasterPort() {
         return masterPort;
+    }
+
+    @Override
+    public Path getWorkingDirectory() {
+        return RedisMasterSlave.WORKING_DIRECTORY;
     }
 
     public List<String> getCommand() {

@@ -1,18 +1,20 @@
 package net.ishiis.redis.unit.config;
 
 
+import net.ishiis.redis.unit.RedisCluster;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 public class RedisClusterConfig extends RedisConfig {
-    private static final String LINE_SEPARATOR = System.getProperty("line.separator");
+    public static final int DEFAULT_REDIS_CLUSTER_PORT = 6379;
 
     // config format
+    private static final String DB_FILE_NAME = "--dbfilename %s.rdb";
     private static final String CLUSTER_ENABLED = "--cluster-enabled yes";
     private static final String CLUSTER_CONFIG_FILE = "--cluster-config-file %s";
-    private static final String CLUSTER_CONFIG_LINE = "%s 127.0.0.1:%d %smaster - 0 %d %d connected %s";
     private static final String CLUSTER_NODE_TIMEOUT = "--cluster-node-timeout %d";
     private static final String CLUSTER_SLAVE_VALIDITY_FACTOR = "--cluster-slave-validity-factor %d";
     private static final String CLUSTER_MIGRATION_BARRIER = "--cluster-migration-barrier %d";
@@ -45,7 +47,7 @@ public class RedisClusterConfig extends RedisConfig {
         private Integer migrationBarrier = 1;
         private String requireFullCoverage = "yes";
 
-        public ClusterBuilder(Integer port) {
+        public ClusterBuilder(Integer port, Integer... otherPorts) {
             this.port = port;
         }
 
@@ -105,6 +107,11 @@ public class RedisClusterConfig extends RedisConfig {
         return Paths.get("nodes-" + port + ".conf");
     }
 
+    @Override
+    public Path getWorkingDirectory() {
+        return RedisCluster.WORKING_DIRECTORY;
+    }
+
     public List<String> getCommand() {
         List<String> command = new ArrayList<>();
         command.add(getRedisBinaryPath());
@@ -113,6 +120,7 @@ public class RedisClusterConfig extends RedisConfig {
         command.add(String.format(LOG_FILE, getLogFile()));
         command.add(String.format(MAX_CLIENTS, getMaxClients()));
         command.add(DIR);
+        command.add(String.format(DB_FILE_NAME, getPort()));
         command.add(String.format(TCP_BACKLOG, getTcpBacklog()));
         command.add(String.format(PROTECTED_MODE, "no"));
         command.add(CLUSTER_ENABLED);
@@ -124,4 +132,5 @@ public class RedisClusterConfig extends RedisConfig {
 
         return command;
     }
+
 }
