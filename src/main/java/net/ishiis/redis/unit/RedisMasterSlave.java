@@ -1,8 +1,9 @@
 package net.ishiis.redis.unit;
 
-import net.ishiis.redis.unit.config.RedisConfig;
 import net.ishiis.redis.unit.config.RedisMasterSlaveConfig;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,6 +12,8 @@ import java.util.stream.Collectors;
 import static net.ishiis.redis.unit.config.RedisServerConfig.DEFAULT_REDIS_SERVER_PORT;
 
 public class RedisMasterSlave implements Redis {
+    public static final Path WORKING_DIRECTORY = Paths.get(System.getProperty("user.dir"), ".redis", String.valueOf(System.currentTimeMillis()));
+
     private final RedisServer master;
     private final List<RedisServer> slaves = new ArrayList<>();
 
@@ -25,7 +28,7 @@ public class RedisMasterSlave implements Redis {
                                 .SlaveBuilder(slavePort, masterPort).build()).collect(Collectors.toList()));
     }
 
-    public RedisMasterSlave(RedisConfig masterConfig, List<RedisConfig> slaveConfigs) {
+    public RedisMasterSlave(RedisMasterSlaveConfig masterConfig, List<RedisMasterSlaveConfig> slaveConfigs) {
         master = new RedisServer(masterConfig);
         slaveConfigs.forEach(slaveConfig -> slaves.add(new RedisServer(slaveConfig)));
     }

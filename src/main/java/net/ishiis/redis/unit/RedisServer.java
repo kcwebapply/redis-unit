@@ -37,7 +37,7 @@ public class RedisServer implements Redis {
     @Override
     public void start() {
         // Create Redis working directory and empty config file.
-        Path tempDirectoryPath = config.getTempDirectory();
+        Path tempDirectoryPath = config.getWorkingDirectory();
         Path logFilePath = Paths.get(tempDirectoryPath.toString(), config.getLogFile().toString());
         try {
             tempDirectoryPath.toFile().mkdirs();
