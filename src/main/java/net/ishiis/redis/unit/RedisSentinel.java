@@ -1,16 +1,22 @@
 package net.ishiis.redis.unit;
 
 
+import net.ishiis.redis.unit.config.RedisMasterSlaveConfig;
+import net.ishiis.redis.unit.config.RedisSentinelConfig;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static net.ishiis.redis.unit.RedisServer.DEFAULT_REDIS_SERVER_PORT;
+import static net.ishiis.redis.unit.config.RedisSentinelConfig.DEFAULT_REDIS_SENTINEL_PORT;
+import static net.ishiis.redis.unit.config.RedisServerConfig.DEFAULT_REDIS_SERVER_PORT;
 
 public class RedisSentinel implements Redis {
-    public static final Integer DEFAULT_REDIS_SENTINEL_PORT = 26379;
+    public static final Path WORKING_DIRECTORY = Paths.get(System.getProperty("user.dir"), ".redis", String.valueOf(System.currentTimeMillis()));
 
     private final RedisMasterSlave masterSlave;
     private final List<RedisServer> sentinels = new ArrayList<>();
@@ -20,16 +26,17 @@ public class RedisSentinel implements Redis {
     }
 
     public RedisSentinel(Integer... sentinelPorts) {
-        this(new RedisConfig.ServerBuilder(DEFAULT_REDIS_SERVER_PORT).build(),
-                Collections.singletonList(new RedisConfig.ServerBuilder(DEFAULT_REDIS_SERVER_PORT + 1)
-                        .masterPort(DEFAULT_REDIS_SERVER_PORT).build()),
+        this(new RedisMasterSlaveConfig.MasterBuilder(DEFAULT_REDIS_SERVER_PORT).build(),
+                Collections.singletonList(new RedisMasterSlaveConfig
+                        .SlaveBuilder(DEFAULT_REDIS_SERVER_PORT + 1, DEFAULT_REDIS_SERVER_PORT).build()),
                 Arrays.stream(sentinelPorts)
                         .map(sentinelPort ->
-                                new RedisConfig.SentinelBuilder(sentinelPort, DEFAULT_REDIS_SERVER_PORT).build())
+                                new RedisSentinelConfig.SentinelBuilder(sentinelPort, DEFAULT_REDIS_SERVER_PORT).build())
                         .collect(Collectors.toList()));
     }
 
-    public RedisSentinel(RedisConfig masterConfig, List<RedisConfig> slaveConfigs, List<RedisConfig> sentinelConfigs) {
+    public RedisSentinel(RedisMasterSlaveConfig masterConfig, List<RedisMasterSlaveConfig> slaveConfigs,
+                         List<RedisSentinelConfig> sentinelConfigs) {
         masterSlave = new RedisMasterSlave(masterConfig, slaveConfigs);
         sentinelConfigs.forEach(sentinelConfig -> sentinels.add(new RedisServer(sentinelConfig)));
     }

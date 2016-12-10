@@ -1,15 +1,19 @@
 package net.ishiis.redis.unit;
 
 
+import net.ishiis.redis.unit.config.RedisConfig;
+import net.ishiis.redis.unit.config.RedisServerConfig;
+
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class RedisServer implements Redis {
-    public static final Integer DEFAULT_REDIS_SERVER_PORT = 6379;
+import static net.ishiis.redis.unit.config.RedisServerConfig.DEFAULT_REDIS_SERVER_PORT;
 
+public class RedisServer implements Redis {
     private static final String REDIS_SERVER_START_UP_COMPLETE_MESSAGE = "The server is now ready to accept connections on port";
     private static final String REDIS_ADDRESS_ALREADY_IN_USE_MESSAGE = "Address already in use";
     private static final String REDIS_SENTINEL_START_UP_COMPLETE_MESSAGE = "Sentinel ID is";
@@ -23,7 +27,7 @@ public class RedisServer implements Redis {
     }
 
     public RedisServer(Integer port) {
-        this(new RedisConfig.ServerBuilder(port).build());
+        this(new RedisServerConfig.ServerBuilder(port).build());
     }
 
     public RedisServer(RedisConfig config) {
@@ -33,13 +37,15 @@ public class RedisServer implements Redis {
     @Override
     public void start() {
         // Create Redis working directory and empty config file.
-        Path tempDirectory;
-        Path logFilePath;
+        Path tempDirectoryPath = config.getWorkingDirectory();
+        Path logFilePath = Paths.get(tempDirectoryPath.toString(), config.getLogFile().toString());
         try {
-            tempDirectory = Paths.get(System.getProperty("user.dir"), ".redis", String.valueOf(System.currentTimeMillis()));
-            tempDirectory.toFile().mkdirs();
-            Paths.get(tempDirectory.toString(), config.getConfigFile().toString()).toFile().createNewFile();
-            logFilePath = Paths.get(tempDirectory.toString(), config.getLogFile().toString());
+            tempDirectoryPath.toFile().mkdirs();
+            File configFile = Paths.get(tempDirectoryPath.toString(), config.getConfigFile().toString()).toFile();
+            if (configFile.exists()){
+                configFile.delete();
+            }
+            configFile.createNewFile();
             logFilePath.toFile().createNewFile();
         } catch (IOException e) {
             throw new RuntimeException("Unable to create a resource.", e);
@@ -50,7 +56,7 @@ public class RedisServer implements Redis {
 
         // Start redis process.
         ProcessBuilder processBuilder = new ProcessBuilder(config.getCommand());
-        processBuilder.directory(tempDirectory.toFile());
+        processBuilder.directory(tempDirectoryPath.toFile());
         processBuilder.redirectError(logFilePath.toFile());
 
         try {

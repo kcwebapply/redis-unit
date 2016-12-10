@@ -1,11 +1,12 @@
 package net.ishiis.redis.unit;
 
 
+import net.ishiis.redis.unit.config.RedisServerConfig;
 import org.junit.Assert;
 import org.junit.Test;
 import redis.clients.jedis.Jedis;
 
-import static net.ishiis.redis.unit.RedisServer.DEFAULT_REDIS_SERVER_PORT;
+import static net.ishiis.redis.unit.config.RedisServerConfig.DEFAULT_REDIS_SERVER_PORT;
 
 
 public class RedisServerTest {
@@ -81,7 +82,7 @@ public class RedisServerTest {
 
     @Test
     public void testUsingRedisConfig() {
-        RedisServer redisServer = new RedisServer(new RedisConfig.ServerBuilder(6666).build());
+        RedisServer redisServer = new RedisServer(new RedisServerConfig.ServerBuilder(6666).build());
         redisServer.start();
         Assert.assertTrue(redisServer.isActive());
         redisServer.stop();

@@ -10,9 +10,11 @@ import redis.clients.jedis.JedisSentinelPool;
 import java.util.HashSet;
 import java.util.Set;
 
-import static net.ishiis.redis.unit.RedisSentinel.DEFAULT_REDIS_SENTINEL_PORT;
+import static net.ishiis.redis.unit.config.RedisSentinelConfig.DEFAULT_REDIS_SENTINEL_PORT;
+
 
 public class RedisSentinelTest {
+
     @Test
     public void testStartAndStop() throws InterruptedException {
         RedisSentinel redisSentinel = new RedisSentinel();
