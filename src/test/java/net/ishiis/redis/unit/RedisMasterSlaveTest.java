@@ -11,9 +11,10 @@ import static net.ishiis.redis.unit.config.RedisServerConfig.DEFAULT_REDIS_SERVE
 public class RedisMasterSlaveTest {
 
     @Test
-    public void testStartAndStop() {
+    public void testStartAndStop() throws InterruptedException {
         RedisMasterSlave redisMasterSlave = new RedisMasterSlave();
         redisMasterSlave.start();
+        Thread.sleep(2000L);
 
         Jedis master = new Jedis("localhost", DEFAULT_REDIS_SERVER_PORT);
         Assert.assertTrue(master.info("Replication").contains("role:master"));
@@ -26,15 +27,20 @@ public class RedisMasterSlaveTest {
         slave.close();
 
         redisMasterSlave.stop();
+
+        Thread.sleep(1000L);
     }
 
     @Test
-    public void testIsActive() {
+    public void testIsActive() throws InterruptedException {
         RedisMasterSlave redisMasterSlave = new RedisMasterSlave();
         Assert.assertFalse(redisMasterSlave.isActive());
         redisMasterSlave.start();
+        Thread.sleep(2000L);
+
         Assert.assertTrue(redisMasterSlave.isActive());
         redisMasterSlave.stop();
         Assert.assertFalse(redisMasterSlave.isActive());
+        Thread.sleep(1000L);
     }
 }
