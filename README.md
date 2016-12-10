@@ -19,7 +19,7 @@ Redis unit requires Java 8 at runtime.
 <dependency>
   <groupId>net.ishiis.redis</groupId>
   <artifactId>redis-unit</artifactId>
-  <version>1.0.0</version>
+  <version>0.0.1</version>
   <scope>test</scope>
 </dependency>
 ```
