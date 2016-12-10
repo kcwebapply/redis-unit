@@ -28,9 +28,9 @@ public class RedisClusterTest {
         Assert.assertNotNull(jedis.clusterInfo().contains("cluster_known_nodes:3"));
         Assert.assertNotNull(jedis.clusterInfo().contains("cluster_size:3"));
 
-        Thread.sleep(1000L);
         jedis.close();
         redisCluster.stop();
+        Thread.sleep(1000L);
     }
 
     @Test
@@ -49,5 +49,6 @@ public class RedisClusterTest {
 
         jedisCluster.close();
         redisCluster.stop();
+        Thread.sleep(1000L);
     }
 }
