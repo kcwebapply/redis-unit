@@ -6,6 +6,7 @@ import net.ishiis.redis.unit.RedisCluster;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class RedisClusterConfig extends RedisConfig {
@@ -116,19 +117,20 @@ public class RedisClusterConfig extends RedisConfig {
         List<String> command = new ArrayList<>();
         command.add(getRedisBinaryPath());
         command.add(getConfigFile().toString());
-        command.add(String.format(PORT, getPort()));
-        command.add(String.format(LOG_FILE, getLogFile()));
-        command.add(String.format(MAX_CLIENTS, getMaxClients()));
-        command.add(DIR);
-        command.add(String.format(DB_FILE_NAME, getPort()));
-        command.add(String.format(TCP_BACKLOG, getTcpBacklog()));
-        command.add(String.format(PROTECTED_MODE, "no"));
-        command.add(CLUSTER_ENABLED);
-        command.add(String.format(CLUSTER_CONFIG_FILE, getClusterConfigFile()));
-        command.add(String.format(CLUSTER_NODE_TIMEOUT, getNodeTimeout()));
-        command.add(String.format(CLUSTER_SLAVE_VALIDITY_FACTOR, getSlaveValidityFactor()));
-        command.add(String.format(CLUSTER_MIGRATION_BARRIER, getMigrationBarrier()));
-        command.add(String.format(CLUSTER_REQUIRE_FULL_COVERAGE, "yes"));
+        command.addAll(Arrays.asList(String.format(PORT, getPort()).split(" ")));
+        command.addAll(Arrays.asList(String.format(LOG_FILE, getLogFile()).split(" ")));
+        command.addAll(Arrays.asList(String.format(MAX_CLIENTS, getMaxClients()).split(" ")));
+        command.addAll(Arrays.asList(DIR.split(" ")));
+        command.addAll(Arrays.asList(String.format(DB_FILE_NAME, getPort()).split(" ")));
+        command.addAll(Arrays.asList(String.format(TCP_BACKLOG, getTcpBacklog()).split(" ")));
+        command.addAll(Arrays.asList(String.format(PROTECTED_MODE, "no").split(" ")));
+
+        command.addAll(Arrays.asList(CLUSTER_ENABLED.split(" ")));
+        command.addAll(Arrays.asList(String.format(CLUSTER_CONFIG_FILE, getClusterConfigFile()).split(" ")));
+        command.addAll(Arrays.asList(String.format(CLUSTER_NODE_TIMEOUT, getNodeTimeout()).split(" ")));
+        command.addAll(Arrays.asList(String.format(CLUSTER_SLAVE_VALIDITY_FACTOR, getSlaveValidityFactor()).split(" ")));
+        command.addAll(Arrays.asList(String.format(CLUSTER_MIGRATION_BARRIER, getMigrationBarrier()).split(" ")));
+        command.addAll(Arrays.asList(String.format(CLUSTER_REQUIRE_FULL_COVERAGE, "yes").split(" ")));
 
         return command;
     }

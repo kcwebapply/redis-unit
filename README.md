@@ -2,6 +2,7 @@ Redis Unit
 =================
 
 [![Build Status](https://travis-ci.org/ishiis/redis-unit.svg?branch=master)](https://travis-ci.org/ishiis/redis-unit)
+[![Build Status](https://ci.appveyor.com/api/projects/status/github/ishiis/redis-unit?branch=master&svg=true)](https://ci.appveyor.com/project/ishiis/redis-unit)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/net.ishiis.redis/redis-unit/badge.svg)](https://maven-badges.herokuapp.com/maven-central/net.ishiis.redis/redis-unit)
 
 Start and stop Redis(v3.2.5) instance for unit testing applications.
@@ -19,7 +20,7 @@ Redis unit requires Java 8 at runtime.
 <dependency>
   <groupId>net.ishiis.redis</groupId>
   <artifactId>redis-unit</artifactId>
-  <version>0.0.1</version>
+  <version>0.0.2</version>
   <scope>test</scope>
 </dependency>
 ```
@@ -50,7 +51,7 @@ masterSlave.stop();
 
 #### 3, Redis Sentinel (+ Redis Master / Slave) ####
 
-Redis Sentinel listen ports `26379, 26380, 26381`.
+Redis Sentinel listen `26379, 26380, 26381`.
 
 ```java
 RedisSentinel sentinel = new RedisSentinel();
@@ -61,7 +62,7 @@ sentinel.stop();
 
 #### 4, Redis Cluster ####
 
-Redis Cluster listen ports `6379, 6380, 6381`.
+Redis Cluster listen `6379, 6380, 6381`.
 
 ```java
 RedisCluster cluster = new RedisCluster();
@@ -71,7 +72,7 @@ cluster.stop();
 ```
 
 ### Customize ###
-Use `RedisConfig` when customize Redis instances.
+If you want to customize Redis instances, use `RedisConfig`.
 
 ```java
 RedisMasterSlaveConfig master = new RedisMasterSlaveConfig.MasterBuilder(6379)
