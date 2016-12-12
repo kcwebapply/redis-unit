@@ -17,5 +17,7 @@ install:
   - cmd: java -version
   - ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 
+build: off
+
 test_script:
   - ./mvnw test -B
