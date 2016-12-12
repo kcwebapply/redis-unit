@@ -57,6 +57,7 @@ public class RedisServer implements Redis {
         // Start redis process.
         ProcessBuilder processBuilder = new ProcessBuilder(config.getCommand());
         processBuilder.directory(tempDirectoryPath.toFile());
+        processBuilder.redirectOutput(logFilePath.toFile());
         processBuilder.redirectError(logFilePath.toFile());
 
         try {

@@ -5,6 +5,7 @@ import net.ishiis.redis.unit.RedisMasterSlave;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class RedisMasterSlaveConfig extends RedisConfig {
@@ -105,16 +106,16 @@ public class RedisMasterSlaveConfig extends RedisConfig {
         List<String> command = new ArrayList<>();
         command.add(getRedisBinaryPath());
         command.add(getConfigFile().toString());
-        command.add(String.format(PORT, getPort()));
-        command.add(String.format(LOG_FILE, getLogFile()));
-        command.add(String.format(MAX_CLIENTS, getMaxClients()));
-        command.add(DIR);
-        command.add(String.format(DB_FILE_NAME, getPort()));
-        command.add(String.format(TCP_BACKLOG, getTcpBacklog()));
-        command.add(String.format(PROTECTED_MODE, "no"));
+        command.addAll(Arrays.asList(String.format(PORT, getPort()).split(" ")));
+        command.addAll(Arrays.asList(String.format(LOG_FILE, getLogFile()).split(" ")));
+        command.addAll(Arrays.asList(String.format(MAX_CLIENTS, getMaxClients()).split(" ")));
+        command.addAll(Arrays.asList(DIR.split(" ")));
+        command.addAll(Arrays.asList(String.format(DB_FILE_NAME, getPort()).split(" ")));
+        command.addAll(Arrays.asList(String.format(TCP_BACKLOG, getTcpBacklog()).split(" ")));
+        command.addAll(Arrays.asList(String.format(PROTECTED_MODE, "no").split(" ")));
 
         if (masterPort != null) {
-            command.add(String.format(SLAVE_OF, getMasterPort()));
+            command.addAll(Arrays.asList(String.format(SLAVE_OF, getMasterPort()).split(" ")));
         }
 
         return command;

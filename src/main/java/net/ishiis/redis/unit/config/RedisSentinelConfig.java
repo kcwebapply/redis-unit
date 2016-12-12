@@ -3,6 +3,7 @@ package net.ishiis.redis.unit.config;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static net.ishiis.redis.unit.RedisSentinel.WORKING_DIRECTORY;
@@ -132,17 +133,19 @@ public class RedisSentinelConfig extends RedisConfig {
         List<String> command = new ArrayList<>();
         command.add(getRedisBinaryPath());
         command.add(getConfigFile().toString());
-        command.add(String.format(PORT, getPort()));
-        command.add(String.format(LOG_FILE, getLogFile()));
-        command.add(String.format(MAX_CLIENTS, getMaxClients()));
-        command.add(DIR);
-        command.add(String.format(TCP_BACKLOG, getTcpBacklog()));
-        command.add(String.format(PROTECTED_MODE, "no"));
+
+        command.addAll(Arrays.asList(String.format(PORT, getPort()).split(" ")));
+        command.addAll(Arrays.asList(String.format(LOG_FILE, getLogFile()).split(" ")));
+        command.addAll(Arrays.asList(String.format(MAX_CLIENTS, getMaxClients()).split(" ")));
+        command.addAll(Arrays.asList(DIR.split(" ")));
+        command.addAll(Arrays.asList(String.format(TCP_BACKLOG, getTcpBacklog()).split(" ")));
+        command.addAll(Arrays.asList(String.format(PROTECTED_MODE, "no").split(" ")));
+
         command.add("--sentinel");
-        command.add(String.format(SENTINEL_MONITOR, getMasterName(), getMasterPort(), getQuorum()));
-        command.add(String.format(SENTINEL_DOWN_AFTER_MILLISECOND, getMasterName(), getDownAfterMillisecond()));
-        command.add(String.format(SENTINEL_PARALLEL_SYNCS, getMasterName(), getParallelSyncs()));
-        command.add(String.format(SENTINEL_FAILOVER_TIMEOUT, getMasterName(), getFailoverTimeout()));
+        command.addAll(Arrays.asList(String.format(SENTINEL_MONITOR, getMasterName(), getMasterPort(), getQuorum()).split(" ")));
+        command.addAll(Arrays.asList(String.format(SENTINEL_DOWN_AFTER_MILLISECOND, getMasterName(), getDownAfterMillisecond()).split(" ")));
+        command.addAll(Arrays.asList(String.format(SENTINEL_PARALLEL_SYNCS, getMasterName(), getParallelSyncs()).split(" ")));
+        command.addAll(Arrays.asList(String.format(SENTINEL_FAILOVER_TIMEOUT, getMasterName(), getFailoverTimeout()).split(" ")));
 
         return command;
     }
