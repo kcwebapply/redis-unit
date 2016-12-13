@@ -11,6 +11,7 @@ import java.util.List;
 public abstract class RedisConfig {
     private static final String REDIS_BINARY_LINUX_64 = "redis-server.3.2.5";
     private static final String REDIS_BINARY_LINUX_32 = "redis-server.3.2.5_32";
+    private static final String REDIS_BINARY_OSX = "redis-server.3.2.5.app";
     private static final String REDIS_BINARY_WINDOWS_64 = "redis-server.3.2.100.exe";
 
     private static final String OPERATING_SYSTEM_NOT_SUPPORT = "OS: %s, ARCH: %s";
@@ -53,8 +54,7 @@ public abstract class RedisConfig {
                         binaryPath = REDIS_BINARY_LINUX_32;
                     }
                 } else if (os.contains("mac")) {
-                    //TODO: add mac binary
-                    binaryPath = null;
+                    binaryPath = REDIS_BINARY_OSX;
                 } else {
                     throw new RuntimeException("Operating is not supported. "
                             + String.format(OPERATING_SYSTEM_NOT_SUPPORT, os, arch));
