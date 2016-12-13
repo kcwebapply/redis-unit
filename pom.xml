@@ -22,8 +22,13 @@
     </license>
     <license>
       <name>Three clause BSD license</name>
-      <url>https://redis.io/topics/license</url>
+      <url>https://github.com/antirez/redis/blob/unstable/COPYING</url>
       <comments>Redis binary</comments>
+    </license>
+    <license>
+      <name>Three clause BSD license</name>
+      <url>https://github.com/MSOpenTech/redis/blob/3.2/license.txt</url>
+      <comments>Redis binary(redis-server.3.2.100.exe)</comments>
     </license>
   </licenses>
 
