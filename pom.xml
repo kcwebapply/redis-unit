@@ -4,7 +4,7 @@
   <groupId>net.ishiis.redis</groupId>
   <artifactId>redis-unit</artifactId>
   <packaging>jar</packaging>
-  <version>0.0.2</version>
+  <version>1.0.0</version>
   <name>redis-unit</name>
   <url>https://github.com/ishiis/redis-unit</url>
   <description>Redis instance for unit testing applications.</description>
@@ -22,8 +22,13 @@
     </license>
     <license>
       <name>Three clause BSD license</name>
-      <url>https://redis.io/topics/license</url>
+      <url>https://github.com/antirez/redis/blob/unstable/COPYING</url>
       <comments>Redis binary</comments>
+    </license>
+    <license>
+      <name>Three clause BSD license</name>
+      <url>https://github.com/MSOpenTech/redis/blob/3.2/license.txt</url>
+      <comments>Redis binary(redis-server.3.2.100.exe)</comments>
     </license>
   </licenses>
 
