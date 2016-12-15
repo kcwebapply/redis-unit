@@ -75,9 +75,8 @@ public abstract class RedisConfig {
                 }
 
                 // copy from in jar
-                try (FileSystem jarFs = FileSystems.newFileSystem(URI.create("jar:"+path.split("!")[0]), new HashMap<>())) {
+                try (FileSystem jarFs = FileSystems.newFileSystem(URI.create("jar:" + path.split("!")[0]), new HashMap<>())) {
                     Path pathInJarFile = jarFs.getPath(path.split("!")[1]);
-                    System.out.println("path in jar file:" + pathInJarFile);
                     if (!REDIS_DIRECTORY.toFile().exists()) REDIS_DIRECTORY.toFile().mkdir();
                     if (!Paths.get(REDIS_DIRECTORY.toString(), pathInJarFile.toString()).toFile().exists()) {
                         return Files.copy(pathInJarFile, Paths.get(REDIS_DIRECTORY.toString(), pathInJarFile.toString())).toString();
