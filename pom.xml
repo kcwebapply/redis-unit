@@ -4,7 +4,7 @@
   <groupId>net.ishiis.redis</groupId>
   <artifactId>redis-unit</artifactId>
   <packaging>jar</packaging>
-  <version>1.0.1</version>
+  <version>1.0.2</version>
   <name>redis-unit</name>
   <url>https://github.com/ishiis/redis-unit</url>
   <description>Redis instance for unit testing applications.</description>
