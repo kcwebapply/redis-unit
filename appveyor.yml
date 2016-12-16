@@ -21,3 +21,6 @@ build: off
 
 test_script:
   - ./mvnw test -B
+
+cache:
+  - C:\Users\appveyor\.m2

@@ -1,17 +1,15 @@
 package net.ishiis.redis.unit.config;
 
 
+import org.apache.commons.io.FileUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URI;
+import java.net.URL;
 import java.net.URLDecoder;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
 import java.util.List;
 
 public abstract class RedisConfig {
@@ -69,22 +67,17 @@ public abstract class RedisConfig {
 
                 String path = new File(URLDecoder.decode(
                         this.getClass().getClassLoader().getResource(binaryName).getFile(), "UTF-8")).getPath();
+
                 // unit test safe
                 if (!path.contains(".jar!")) {
                     return path;
                 }
 
                 // copy from in jar
-                try (FileSystem jarFs = FileSystems.newFileSystem(URI.create("jar:"+path.split("!")[0]), new HashMap<>())) {
-                    Path pathInJarFile = jarFs.getPath(path.split("!")[1]);
-                    System.out.println("path in jar file:" + pathInJarFile);
-                    if (!REDIS_DIRECTORY.toFile().exists()) REDIS_DIRECTORY.toFile().mkdir();
-                    if (!Paths.get(REDIS_DIRECTORY.toString(), pathInJarFile.toString()).toFile().exists()) {
-                        return Files.copy(pathInJarFile, Paths.get(REDIS_DIRECTORY.toString(), pathInJarFile.toString())).toString();
-                    } else {
-                        return Paths.get(REDIS_DIRECTORY.toString(),pathInJarFile.toString()).toString();
-                    }
-                }
+                URL inputUrl = this.getClass().getClassLoader().getResource(binaryName);
+                if (!REDIS_DIRECTORY.toFile().exists()) REDIS_DIRECTORY.toFile().mkdir();
+                FileUtils.copyURLToFile(inputUrl, new File(Paths.get(REDIS_DIRECTORY.toString(), binaryName).toString()));
+                return Paths.get(REDIS_DIRECTORY.toString(), binaryName).toString();
 
             } catch (UnsupportedEncodingException e) {
                 throw new RuntimeException("UTF-8 is not supported encoding.", e);
