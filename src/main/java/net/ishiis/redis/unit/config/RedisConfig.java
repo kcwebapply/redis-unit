@@ -74,9 +74,11 @@ public abstract class RedisConfig {
                 }
 
                 // copy from in jar
-                URL inputUrl = this.getClass().getClassLoader().getResource(binaryName);
+                URL redisUrl = this.getClass().getClassLoader().getResource(binaryName);
                 if (!REDIS_DIRECTORY.toFile().exists()) REDIS_DIRECTORY.toFile().mkdir();
-                FileUtils.copyURLToFile(inputUrl, new File(Paths.get(REDIS_DIRECTORY.toString(), binaryName).toString()));
+                if (!Paths.get(REDIS_DIRECTORY.toString(), binaryName).toFile().exists()) {
+                    FileUtils.copyURLToFile(redisUrl, Paths.get(REDIS_DIRECTORY.toString(), binaryName).toFile());
+                }
                 return Paths.get(REDIS_DIRECTORY.toString(), binaryName).toString();
 
             } catch (UnsupportedEncodingException e) {
