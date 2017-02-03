@@ -1,17 +1,20 @@
 package net.ishiis.redis.unit.config;
 
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * The Redis Server configuration
+ */
 public class RedisServerConfig extends RedisConfig {
     public static final Integer DEFAULT_REDIS_SERVER_PORT = 6379;
-    public static final Path WORKING_DIRECTORY = Paths.get(System.getProperty("user.dir"), ".redis", String.valueOf(System.currentTimeMillis()));
+    public static final Path WORKING_DIRECTORY =
+            Paths.get(System.getProperty("user.dir"), ".redis", String.valueOf(System.currentTimeMillis()));
 
-    // config format
+    // configuration format
     private static final String DB_FILE_NAME = "--dbfilename %s.rdb";
 
     public RedisServerConfig(ServerBuilder serverBuilder) {
@@ -21,6 +24,9 @@ public class RedisServerConfig extends RedisConfig {
         this.tcpBacklog = serverBuilder.tcpBacklog;
     }
 
+    /**
+     * Server configuration builder
+     */
     public static class ServerBuilder {
         private Integer port;
         private String redisBinaryPath;
@@ -51,10 +57,21 @@ public class RedisServerConfig extends RedisConfig {
         }
     }
 
+    /**
+     * Return working directory
+     * @return working directory path
+     */
+    @Override
     public Path getWorkingDirectory() {
         return WORKING_DIRECTORY;
     }
 
+    /**
+     * Return command list
+     *
+     * @return command list
+     */
+    @Override
     public List<String> getCommand() {
         List<String> command = new ArrayList<>();
         command.add(getRedisBinaryPath());

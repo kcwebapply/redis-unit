@@ -12,6 +12,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+/**
+ * The Redis configuration
+ *
+ * @see RedisServerConfig
+ * @see RedisMasterSlaveConfig
+ * @see RedisSentinelConfig
+ * @see RedisClusterConfig
+ */
 public abstract class RedisConfig {
     private static final Path REDIS_DIRECTORY = Paths.get(System.getProperty("user.dir"), ".redis");
     private static final String REDIS_BINARY_LINUX_64 = "redis-server.3.2.5";
@@ -21,7 +29,7 @@ public abstract class RedisConfig {
 
     private static final String OPERATING_SYSTEM_NOT_SUPPORT = "OS: %s, ARCH: %s";
 
-    // config format
+    // configuration format
     protected static final String PORT = "--port %d";
     protected static final String LOG_FILE = "--logfile %s";
     protected static final String TCP_BACKLOG= "--tcp-backlog %d";
@@ -29,7 +37,7 @@ public abstract class RedisConfig {
     protected static final String DIR = "--dir .";
     protected static final String PROTECTED_MODE = "--protected-mode %s";
 
-    // redis config
+    // redis configuration
     protected Integer port;
     protected String redisBinaryPath;
     protected Integer maxClients;
@@ -39,6 +47,12 @@ public abstract class RedisConfig {
         return port;
     }
 
+    /**
+     * Return redis binary path
+     *
+     * @throws {@link RuntimeException} if unsupported environment
+     * @return binary path
+     */
     public String getRedisBinaryPath() {
         if (redisBinaryPath == null) {
             try {
@@ -49,7 +63,7 @@ public abstract class RedisConfig {
                     if (arch.contains("64")) {
                         binaryName = REDIS_BINARY_WINDOWS_64;
                     } else {
-                        throw new RuntimeException("Operating is not supported. "
+                        throw new RuntimeException("Operating system is not supported. "
                                 + String.format(OPERATING_SYSTEM_NOT_SUPPORT, os, arch));
                     }
                 } else if (os.contains("linux")) {
@@ -61,7 +75,7 @@ public abstract class RedisConfig {
                 } else if (os.contains("mac")) {
                     binaryName = REDIS_BINARY_OSX;
                 } else {
-                    throw new RuntimeException("Operating is not supported. "
+                    throw new RuntimeException("Operating system is not supported. "
                             + String.format(OPERATING_SYSTEM_NOT_SUPPORT, os, arch));
                 }
 
@@ -90,18 +104,37 @@ public abstract class RedisConfig {
         return redisBinaryPath;
     }
 
+    /**
+     * Return configuration file path
+     *
+     * @return configuration file path
+     */
     public Path getConfigFile() {
         return Paths.get(port + ".conf");
     }
 
+    /**
+     * Return log file path
+     *
+     * @return log file path
+     */
     public Path getLogFile() {
         return Paths.get(port + ".log");
     }
 
+    /**
+     * Return the number of max client
+     *
+     * @return max client
+     */
     public Integer getMaxClients() {
         return maxClients;
     }
 
+    /**
+     * Return tcp back log
+     * @return tcp back log
+     */
     public Integer getTcpBacklog() {
         return tcpBacklog;
     }

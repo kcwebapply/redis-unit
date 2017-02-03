@@ -13,6 +13,9 @@ import java.nio.file.Paths;
 
 import static net.ishiis.redis.unit.config.RedisServerConfig.DEFAULT_REDIS_SERVER_PORT;
 
+/**
+ * Redis server
+ */
 public class RedisServer implements Redis {
     private static final String REDIS_SERVER_START_UP_COMPLETE_MESSAGE = "The server is now ready to accept connections on port";
     private static final String REDIS_ADDRESS_ALREADY_IN_USE_MESSAGE = "Address already in use";
@@ -22,18 +25,33 @@ public class RedisServer implements Redis {
     private RedisConfig config;
     private Process process;
 
+    /**
+     * Default constructor
+     */
     public RedisServer() {
         this(DEFAULT_REDIS_SERVER_PORT);
     }
 
+    /**
+     * Constructor
+     * @param port server port
+     */
     public RedisServer(Integer port) {
         this(new RedisServerConfig.ServerBuilder(port).build());
     }
 
+    /**
+     * Constructor
+     * @param config {@link RedisConfig} list
+     */
     public RedisServer(RedisConfig config) {
         this.config = config;
     }
 
+    /**
+     * Start redis server
+     * @throws RuntimeException when failed to start redis server or failed to create resources
+     */
     @Override
     public void start() {
         // Create Redis working directory and empty config file.
@@ -87,6 +105,10 @@ public class RedisServer implements Redis {
         }
     }
 
+    /**
+     * Stop redis server
+     * @throws RuntimeException when failed to stop redis server
+     */
     @Override
     public void stop() {
         process.destroy();
@@ -99,6 +121,10 @@ public class RedisServer implements Redis {
         }
     }
 
+    /**
+     * Return whether cluster is alive
+     * @return {@code true} if  redis server is active, {@code false} otherwise
+     */
     @Override
     public Boolean isActive() {
         return process != null && process.isAlive();
