@@ -18,6 +18,9 @@ import java.util.stream.IntStream;
 
 import static net.ishiis.redis.unit.config.RedisClusterConfig.DEFAULT_REDIS_CLUSTER_PORT;
 
+/**
+ * Redis cluster
+ */
 public class RedisCluster implements Redis {
     public static final Path WORKING_DIRECTORY = Paths.get(System.getProperty("user.dir"), ".redis", String.valueOf(System.currentTimeMillis()));
     public static final int REDIS_CLUSTER_SLOTS = 16383;
@@ -26,36 +29,62 @@ public class RedisCluster implements Redis {
     private static final String CLUSTER_CONFIG_END_LINE = "vars currentEpoch %d lastVoteEpoch 0";
     private final List<RedisServer> cluster = new ArrayList<>();
 
+    /**
+     * Default constructor
+     */
     public RedisCluster() {
         this(DEFAULT_REDIS_CLUSTER_PORT, DEFAULT_REDIS_CLUSTER_PORT +1, DEFAULT_REDIS_CLUSTER_PORT +2);
     }
 
+    /**
+     * Constructor
+     * @param clusterPorts array of cluster port
+     */
     public RedisCluster(Integer... clusterPorts) {
         this(Arrays.stream(clusterPorts)
                 .map(clusterPort -> new RedisClusterConfig.ClusterBuilder(clusterPort).build())
                 .collect(Collectors.toList()));
     }
 
+    /**
+     * Constructor
+     * @param clusterConfigs {@link RedisClusterConfig} list
+     */
     public RedisCluster(List<RedisClusterConfig> clusterConfigs) {
         createClusterConfigFile(clusterConfigs);
         clusterConfigs.forEach(clusterConfig -> cluster.add(new RedisServer(clusterConfig)));
     }
 
+    /**
+     * Start all redis cluster node
+     */
     @Override
     public void start() {
         cluster.forEach(RedisServer::start);
     }
 
+    /**
+     * Stop all redis cluster node
+     */
     @Override
     public void stop() {
         cluster.forEach(RedisServer::stop);
     }
 
+    /**
+     * Return whether cluster is alive
+     * @return {@code true} if all redis cluster node is active, {@code false} otherwise
+     */
     @Override
     public Boolean isActive() {
         return !cluster.isEmpty() && cluster.stream().allMatch(RedisServer::isActive);
     }
 
+    /**
+     * Create cluster configuration file
+     * @param clusterConfigs {@link RedisClusterConfig} list
+     * @throws {@link RuntimeException} when file can not be created
+     */
     private void createClusterConfigFile(List<RedisClusterConfig> clusterConfigs) {
         int size = clusterConfigs.size();
         List<String> slots = getSlotRangeList(size);

@@ -9,10 +9,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * The Redis Cluster configuration
+ */
 public class RedisClusterConfig extends RedisConfig {
     public static final int DEFAULT_REDIS_CLUSTER_PORT = 6379;
 
-    // config format
+    // configuration format
     private static final String DB_FILE_NAME = "--dbfilename %s.rdb";
     private static final String CLUSTER_ENABLED = "--cluster-enabled yes";
     private static final String CLUSTER_CONFIG_FILE = "--cluster-config-file %s";
@@ -21,12 +24,16 @@ public class RedisClusterConfig extends RedisConfig {
     private static final String CLUSTER_MIGRATION_BARRIER = "--cluster-migration-barrier %d";
     private static final String CLUSTER_REQUIRE_FULL_COVERAGE = "--cluster-require-full-coverage %s";
 
-    // cluster config
+    // cluster configuration
     private Integer nodeTimeout;
     private Integer slaveValidityFactor;
     private Integer migrationBarrier;
     private String requireFullCoverage;
 
+    /**
+     * Constructor
+     * @param clusterBuilder cluster builder
+     */
     public RedisClusterConfig(ClusterBuilder clusterBuilder) {
         this.port = clusterBuilder.port;
         this.redisBinaryPath = clusterBuilder.redisBinaryPath;
@@ -38,6 +45,9 @@ public class RedisClusterConfig extends RedisConfig {
         this.requireFullCoverage = clusterBuilder.requireFullCoverage;
     }
 
+    /**
+     * Cluster builder
+     */
     public static class ClusterBuilder {
         private Integer port;
         private String redisBinaryPath;
@@ -92,27 +102,52 @@ public class RedisClusterConfig extends RedisConfig {
         }
     }
 
+    /**
+     * Return node timeout
+     * @return node timeout
+     */
     public Integer getNodeTimeout() {
         return nodeTimeout;
     }
 
+    /**
+     * Return slave validity factor
+     * @return slave validity factor
+     */
     public Integer getSlaveValidityFactor() {
         return slaveValidityFactor;
     }
 
+    /**
+     * Return migration barrier
+     * @return migration barrier
+     */
     public Integer getMigrationBarrier() {
         return migrationBarrier;
     }
 
+    /**
+     * Return cluster configuration file path
+     * @return cluster configuration file path
+     */
     public Path getClusterConfigFile() {
         return Paths.get("nodes-" + port + ".conf");
     }
 
+    /**
+     * Return working directory
+     * @return working directory path
+     */
     @Override
     public Path getWorkingDirectory() {
         return RedisCluster.WORKING_DIRECTORY;
     }
 
+    /**
+     * Return command list
+     * @return command list
+     */
+    @Override
     public List<String> getCommand() {
         List<String> command = new ArrayList<>();
         command.add(getRedisBinaryPath());

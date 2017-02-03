@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * The Redis master/slave configuration
+ */
 public class RedisMasterSlaveConfig extends RedisConfig {
 
     // config format
@@ -16,6 +19,10 @@ public class RedisMasterSlaveConfig extends RedisConfig {
 
     private Integer masterPort;
 
+    /**
+     * Constructor
+     * @param masterBuilder master builder
+     */
     public RedisMasterSlaveConfig(MasterBuilder masterBuilder) {
         this.port = masterBuilder.port;
         this.redisBinaryPath = masterBuilder.redisBinaryPath;
@@ -23,6 +30,10 @@ public class RedisMasterSlaveConfig extends RedisConfig {
         this.tcpBacklog = masterBuilder.tcpBacklog;
     }
 
+    /**
+     * Constructor
+     * @param slaveBuilder slave builder
+     */
     public RedisMasterSlaveConfig(SlaveBuilder slaveBuilder) {
         this.port = slaveBuilder.port;
         this.redisBinaryPath = slaveBuilder.redisBinaryPath;
@@ -31,6 +42,9 @@ public class RedisMasterSlaveConfig extends RedisConfig {
         this.tcpBacklog = slaveBuilder.tcpBacklog;
     }
 
+    /**
+     * Master configuration builder
+     */
     public static class MasterBuilder {
         private Integer port;
         private String redisBinaryPath;
@@ -61,6 +75,9 @@ public class RedisMasterSlaveConfig extends RedisConfig {
         }
     }
 
+    /**
+     * Slave configuration builder
+     */
     public static class SlaveBuilder {
         private Integer port;
         private String redisBinaryPath;
@@ -93,15 +110,29 @@ public class RedisMasterSlaveConfig extends RedisConfig {
         }
     }
 
+    /**
+     * Return master port
+     * @return master port
+     */
     public Integer getMasterPort() {
         return masterPort;
     }
 
+    /**
+     * Return working directory
+     * @return working directory path
+     */
     @Override
     public Path getWorkingDirectory() {
         return RedisMasterSlave.WORKING_DIRECTORY;
     }
 
+    /**
+     * Return command list
+     *
+     * @return command list
+     */
+    @Override
     public List<String> getCommand() {
         List<String> command = new ArrayList<>();
         command.add(getRedisBinaryPath());

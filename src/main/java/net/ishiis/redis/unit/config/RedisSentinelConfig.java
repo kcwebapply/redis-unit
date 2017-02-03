@@ -8,16 +8,19 @@ import java.util.List;
 
 import static net.ishiis.redis.unit.RedisSentinel.WORKING_DIRECTORY;
 
+/**
+ * The Redis Sentinel configuration
+ */
 public class RedisSentinelConfig extends RedisConfig {
     public static final Integer DEFAULT_REDIS_SENTINEL_PORT = 26379;
 
-    // config format
+    // configuration format
     private static final String SENTINEL_MONITOR = "--sentinel monitor %s 127.0.0.1 %d %d";
     private static final String SENTINEL_DOWN_AFTER_MILLISECOND = "--sentinel down-after-milliseconds %s %d";
     private static final String SENTINEL_PARALLEL_SYNCS = "--sentinel parallel-syncs %s %d";
     private static final String SENTINEL_FAILOVER_TIMEOUT = "--sentinel failover-timeout %s %d";
 
-    // sentinel config
+    // sentinel configuration
     private Integer masterPort;
     private String masterName;
     private Integer quorum;
@@ -25,6 +28,10 @@ public class RedisSentinelConfig extends RedisConfig {
     private Integer failoverTimeout;
     private Integer parallelSyncs;
 
+    /**
+     * Constructor
+     * @param sentinelBuilder sentinel builder
+     */
     public RedisSentinelConfig(SentinelBuilder sentinelBuilder) {
         this.port = sentinelBuilder.port;
         this.redisBinaryPath = sentinelBuilder.redisBinaryPath;
@@ -38,6 +45,9 @@ public class RedisSentinelConfig extends RedisConfig {
         this.parallelSyncs = sentinelBuilder.parallelSyncs;
     }
 
+    /**
+     * Sentinel configuration builder
+     */
     public static class SentinelBuilder {
         private Integer port;
         private String redisBinaryPath;
@@ -100,35 +110,69 @@ public class RedisSentinelConfig extends RedisConfig {
         }
     }
 
+    /**
+     * Return master port
+     * @return master port
+     */
     public Integer getMasterPort() {
         return masterPort;
     }
 
+    /**
+     * Return master name
+     * @return master name
+     */
     public String getMasterName() {
         return masterName;
     }
 
+    /**
+     * Return the number of quorum
+     * @return quorum
+     */
     public Integer getQuorum() {
         return quorum;
     }
 
+    /**
+     * Return down after millisecond
+     * @return down after millisecond
+     */
     public Integer getDownAfterMillisecond() {
         return downAfterMillisecond;
     }
 
+    /**
+     * Return failover timeout
+     * @return failover timeout
+     */
     public Integer getFailoverTimeout() {
         return failoverTimeout;
     }
 
+    /**
+     * Return parallel syncs
+     * @return parallel syncs
+     */
     public Integer getParallelSyncs() {
         return parallelSyncs;
     }
 
+    /**
+     * Return working directory
+     * @return working directory path
+     */
     @Override
     public Path getWorkingDirectory() {
         return WORKING_DIRECTORY;
     }
 
+    /**
+     * Return command list
+     *
+     * @return command list
+     */
+    @Override
     public List<String> getCommand() {
         List<String> command = new ArrayList<>();
         command.add(getRedisBinaryPath());
